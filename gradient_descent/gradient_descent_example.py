@@ -5,8 +5,16 @@
 
 import numpy as np
 import matplotlib.pyplot as plt
-# y = mx + b
-# m is slope, b is y-intercept
+from matplotlib import animation
+
+global_points = np.genfromtxt("data.csv", delimiter=",")
+learning_rate = 0.0001
+
+fig = plt.figure()
+ax = plt.axes(xlim=(0, 80), ylim=(20,120))
+line, = ax.plot([], [], lw=2)
+
+
 def compute_error(b, m, points):
     
     totalError = 0
@@ -33,54 +41,55 @@ def step_gradient(b_current, m_current, points, learningRate):
     new_b = b_current - (learningRate * b_gradient)
     new_m = m_current - (learningRate * m_gradient)
 
-
-    ## ----- uncomment to visualise (visualisation not good at all)
-    # fig = plt.figure()
-    # timer = fig.canvas.new_timer(interval = 500) #creating a timer object and setting an interval of 3000 milliseconds
-    # timer.add_callback(close_event)
-    # x1 = np.linspace(0, 70, 100)
-    # y1 = new_m * x1 + new_b
-    # plt.plot(x1,y1)
-    # plt.scatter(points[:,0], points[:,1])
-    # plt.ylabel('some numbers')
-
-    # timer.start()
-    # plt.show()
-
-    ## --------------------
-
     return [new_b, new_m]
 
 def close_event():
     plt.close()
 
-def perform_gradient_descent(points, starting_b, starting_m, learning_rate, num_iterations):
+def animate(i):
+    global global_b
+    global global_m
     
-    b = starting_b
-    m = starting_m
-    
-    for i in range(num_iterations):
-        b, m = step_gradient(b, m, points, learning_rate)
+    global_b, global_m = step_gradient(global_b, global_m, global_points, learning_rate)
 
-    return [b, m]
+    x = np.linspace(0, 100, 100)
+    y = global_m * x + global_b
+
+    line.set_data(x, y)
+    return line,
+
+
+def perform_gradient_descent(starting_b, starting_m, num_iterations):
+    global global_b
+    global global_m
+    global_b = starting_b
+    global_m = starting_m
+
+    anim = animation.FuncAnimation(fig, animate, init_func=init,
+                               frames=num_iterations, interval=200, blit=True)
+    
+    plt.scatter(global_points[:,0], global_points[:,1])
+    plt.show()
 
 def run():
     
-    points = np.genfromtxt("data.csv", delimiter=",")
     
-    learning_rate = 0.0001
     initial_b = 0 # initial y-intercept guess
     initial_m = 0 # initial slope guess
     num_iterations = 1000
     
-    print "Starting gradient descent at b = {0}, m = {1}, error = {2}".format(initial_b, initial_m, compute_error(initial_b, initial_m, points))
+    print "Starting gradient descent at b = {0}, m = {1}, error = {2}".format(initial_b, initial_m, compute_error(initial_b, initial_m, global_points))
     
     print "Running..."
     
-    [b, m] = perform_gradient_descent(points, initial_b, initial_m, learning_rate, num_iterations)
+    perform_gradient_descent(initial_b, initial_m, num_iterations)
     
-    print "After {0} iterations b = {1}, m = {2}, error = {3}".format(num_iterations, b, m, compute_error(b, m, points))
+    # print "After {0} iterations b = {1}, m = {2}, error = {3}".format(num_iterations, b, m, compute_error(b, m, global_points))
     # plt.show()
+
+def init():
+    line.set_data([], [])
+    return line,
 
 
 if __name__ == '__main__':
