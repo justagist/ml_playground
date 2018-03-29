@@ -4,6 +4,7 @@ import scipy.io as io
 from matplotlib import pyplot as plt
 from matplotlib import colors
 
+# Usage: python test_svm.py --train linearly_separable_data.csv --svmC 1 --verbose True --num_epochs 10
 
 def plot_svm(X,Y,pred_func):
     # determine canvas borders
@@ -148,7 +149,7 @@ def main(argv=None):
 
         if plot:
             eval_fun = lambda X: predicted_class.eval(feed_dict={x:X}); 
-            plot_svm(train_data, train_labels[:,0], eval_fun)
+            plot_svm(train_data, train_labels.flatten(), eval_fun)
     
 if __name__ == '__main__':
     tf.app.run()
