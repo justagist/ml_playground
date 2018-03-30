@@ -101,17 +101,19 @@ class SupportVectorMachine:
 
         # Iterate and train.
         for step in xrange(epochs * self.train_size_ // self.batch_size_):
-            if verbose:
-                print step+1,
                 
             offset = (step * self.batch_size_) % self.train_size_
             batch_data = self.data_[offset:(offset + self.batch_size_), :]
             batch_labels = labels[offset:(offset + self.batch_size_)]
             _, loss = sess.run([train_step, self.svm_loss_], feed_dict={self.x_: batch_data, self.y_: batch_labels})
-            print 'loss: ', loss
-            
-            if verbose and offset >= self.train_size_-self.batch_size_:
-                print
+
+            if verbose:
+
+                print step+1,
+                print 'loss: ', loss
+
+                if offset >= self.train_size_ - self.batch_size_:
+                    print
 
         # Give very detailed output.
         if verbose:
@@ -168,7 +170,7 @@ def run_SVM(argv=None):
     train_labels[train_labels==0] = -1
 
     # Get the number of epochs for training.
-    num_epochs = FLAGS.num_epochs
+    num_epochs = FLAGS.epochs
 
     # Get the C param of SVM
     svmC = FLAGS.svmC
@@ -184,7 +186,7 @@ if __name__ == '__main__':
     # ===================== Define the flags useable from the command line =============================
 
     tf.app.flags.DEFINE_string('train', None, 'File containing the data (2D points with labels).')
-    tf.app.flags.DEFINE_integer('num_epochs', 1, 'Number of training epochs.')
+    tf.app.flags.DEFINE_integer('epochs', 5, 'Number of training epochs.')
     tf.app.flags.DEFINE_integer('batch_size', 100, 'Number of training points to use per training step')
     tf.app.flags.DEFINE_float('svmC', 1, 'The C parameter of the SVM cost function.')
     tf.app.flags.DEFINE_float('lr', 0.01, 'Learning rate for training.')
