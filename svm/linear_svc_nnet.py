@@ -4,8 +4,8 @@
     @author: JustaGist
     @package: ml_playground
 
-    @Usage: python run_svm.py --train linearly_separable_data.csv --svmC 1 --verbose True --num_epochs 10
-            python run_svm.py -h
+    @Usage: python linear_svc_nnet.py --train linearly_separable_data.csv --svmC 1 --verbose True --num_epochs 10
+            python linear_svc_nnet.py -h
 
 '''
 
