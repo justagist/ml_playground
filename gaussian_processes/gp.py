@@ -7,7 +7,7 @@
     @Usage: python gp.py
 
 '''
-
+import sys
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -189,9 +189,11 @@ if __name__ == '__main__':
     # =================================================================================
 
     # ----- The true unknown function we are trying to approximate --------------
-
     f = lambda x: np.sin(0.9*x).flatten()
-    # f = lambda x: (0.25*(x**2)).flatten()
+
+    if len(sys.argv) > 1:
+        if sys.argv[1] == '2':
+            f = lambda x: (0.25*(x**2)).flatten()
 
     # ----------------------------------------------------------------------------
     
