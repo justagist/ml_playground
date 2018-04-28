@@ -1,3 +1,13 @@
+'''
+    Tesiting knn classification on the iris dataset.
+    
+    @author: JustaGist
+    @package: ml_playground
+
+    @Usage: python knn.py
+
+'''
+
 import csv
 import math
 import random
