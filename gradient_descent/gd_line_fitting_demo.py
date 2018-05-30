@@ -123,7 +123,7 @@ if __name__ == '__main__':
 
     points = np.genfromtxt("data.csv", delimiter=",")
 
-    gd = GradientDescent(learning_rate = 0.0001, points=points, visualise = True, starting_b = 0, starting_m = 0, num_iterations = 1000)
+    gd = GradientDescent(learning_rate = 0.00001, points=points, visualise = True, starting_b = 0, starting_m = 0, num_iterations = 1000)
 
     print "Initial Error:", gd.compute_error()
 
